@@ -47,16 +47,33 @@ var game = {
 
     $('.available-characters').off("click");
   },
+
   endGame: function() {
-    this.playSound(titleMusic);
+    // this.playSound(titleMusic);
     if(attacker.health-power > 5) {
-      this.updateDOM('header #prompt', 'You win, Jedi!')
+      this.victory();
     } else {
-      this.updateDOM('header #prompt', 'You lose, Jedi!')
+      this.lose();
     }
-    
-    replayButton.show();
-    restartbutton.click(init());
+  },
+  
+  lose: function () {
+    // this.playSound(this.loseMusic);
+    this.attackButton.hide();
+    this.updateDOM('header #prompt', 'You lose, Jedi!');
+    this.promptReplay();
+  },
+
+  victory: function () {
+    // this.playSound(this.loseMusic);
+    this.attackButton.hide();
+    this.updateDOM('header #prompt', 'You win, Jedi!')
+    this.promptReplay();
+  },
+
+  promptReplay: function () {
+    this.replayButton.show();
+    this.replayButton.click(this.init());
   },
 
   updateDOM: function(DOMElement, string) {
@@ -163,27 +180,6 @@ var game = {
 
       this.updateDOMCharacters();
     }
-  },
-
-  victory: function() {
-    // play victory music
-    //hide attack button
-    this.attackButton.hide();
-    //remove opponent from defender array
-    var i = this.defenders.indexOf(this.defender);
-    console.log(i);
-    //add to defeated array
-    this.defender.isAttacker = false;
-    this.defender.isDefender = false;
-    this.defender.isDefeated = true;
-
-    
-    // updateDOMCharacters()
-    // if defender array length !< 0
-    //   character-images.onclick => choosePlayers()
-    // else
-    //   endGame()
-    // }
   },
 
   attack: function () {
