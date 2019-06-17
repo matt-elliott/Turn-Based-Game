@@ -2,3 +2,6 @@
   color: #fff;
   border: 2px solid red;
 }
+#prompt {
+  text-transform: capitalize;
+}

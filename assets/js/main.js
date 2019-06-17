@@ -6,6 +6,7 @@ var game = {
     // this.attackSound = audofile;
     // this.victoryMusic = audofile;
     // this.loseMusic = audoFile;
+    // this.wrongKeySound = audioFIle;
     this.availableCharacters = {
       obiwan: new Character('obiwan',100, 5, 25),
       darth: new Character('darth', 200, 10, 25),
@@ -31,6 +32,7 @@ var game = {
     //load characters to DOM
     this.updateDOM($('#prompt'), 'Select Your Hero to Start Battle!');
     this.updateDOMCharacters();
+
     $('.character-image').on('click', function() {
       game.choosePlayers();
     });
@@ -44,6 +46,15 @@ var game = {
     console.log('game started');
     // this.play(this.gameMusic);
     this.attackButton.click(this.attack);
+
+    $('body').on('keyup', function () {
+      if (event.key === ' ') {
+        game.attack();
+      } else {
+        game.playSound(game.wrongKeySound);
+      }
+    });
+
     this.attackButton.show();
 
     $('.available-characters').off("click");
@@ -61,14 +72,14 @@ var game = {
   lose: function () {
     // this.playSound(this.loseMusic);
     this.attackButton.hide();
-    this.updateDOM('header #prompt', 'You lose, Jedi!');
+    this.updateDOM('header #prompt', `You Lose, ${game.attacker.name}!`);
     this.promptReplay();
   },
 
   victory: function () {
     // this.playSound(this.loseMusic);
     this.attackButton.hide();
-    this.updateDOM('header #prompt', 'You win, Jedi!')
+    this.updateDOM('header #prompt', `You Win, ${game.attacker.name}!`);
     this.promptReplay();
   },
 
