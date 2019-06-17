@@ -7,10 +7,10 @@ var game = {
     // this.victoryMusic = audofile;
     // this.loseMusic = audoFile;
     this.availableCharacters = {
-      obiwan: new Character('obiwan',100,5,25),
-      darth: new Character('darth', 200,10,25),
-      luke: new Character('luke', 50,20,50),
-      solo: new Character('solo', 500,2000,5000)
+      obiwan: new Character('obiwan',100, 5, 25),
+      darth: new Character('darth', 200, 10, 25),
+      luke: new Character('luke', 50, 20, 50),
+      solo: new Character('solo', 500, 2000, 5000)
     };
     this.attacker;
     this.defenders = {};
@@ -42,7 +42,7 @@ var game = {
   startGame: function() {
     console.log('game started');
     // this.play(this.gameMusic);
-    this.attackButton.click(this.attacker.attack);
+    this.attackButton.click(this.attack);
     this.attackButton.show();
 
     $('.available-characters').off("click");
@@ -84,7 +84,7 @@ var game = {
         Object.keys(theObject).forEach(function(key) {
           var item = theObject[key];
           var html = item.returnMarkup();
-          console.log(html);
+          // console.log(html);
           targetDiv.append(html);
         });
       }
@@ -92,7 +92,7 @@ var game = {
 
     function outputCharacterHTML(item, targetDiv) {
       var html = item.returnMarkup();
-      console.log(html);
+      // console.log(html);
       targetDiv.append(html);
     }
 
@@ -112,18 +112,18 @@ var game = {
   },
 
   choosePlayers: function() {
-    console.log('click');
-    console.assert(this.attacker, `No Attacker`);
+    // console.log('click');
+    // console.assert(this.attacker, `No Attacker`);
     if(!this.attacker) {
       var characterName = $(event.currentTarget).data('name');
-      console.error(`%cSetting Attacker`,`background: red; color: white; font-weight: bold;`);
-      console.assert(this.availableCharacters[characterName], 'cant find attacker!');
+      // console.error(`%cSetting Attacker`,`background: red; color: white; font-weight: bold;`);
+      // console.assert(this.availableCharacters[characterName], 'cant find attacker!');
       if(this.availableCharacters[characterName]) {
           this.attacker = this.availableCharacters[characterName];
           this.attacker.isAttacker = true;
           this.attacker.isDefender = false;
           this.attacker.isOpponent = false;
-          console.table(this.attacker);
+          // console.table(this.attacker);
           delete this.availableCharacters[characterName];
           //** TODO : remove click on already selected characters **/
           // $('.available-characters').data(attackerName).off("click");
@@ -135,39 +135,40 @@ var game = {
         var name = characterToMove.name;
         characterToMove.isAttacker = false;
         characterToMove.isDefender = true;
-        console.table(characterToMove);
+        // console.table(characterToMove);
 
         delete game.availableCharacters[character];
         game.defenders[characterToMove.name] = characterToMove;
       });
 
-      console.log(`%cattackerName = ${characterName}`, `color: orange; font-weight: bold`);
-      console.log(`%cavailable characters`, `color: lightblue; font-weight: bold;`)
-      console.table(this.availableCharacters);
-      console.log(`%cavailable defenders`, `color: lightblue; font-weight: bold;`)
-      console.table(this.defenders);
+      // console.log(`%cattackerName = ${characterName}`, `color: orange; font-weight: bold`);
+      // console.log(`%cavailable characters`, `color: lightblue; font-weight: bold;`)
+      // console.table(this.availableCharacters);
+      // console.log(`%cavailable defenders`, `color: lightblue; font-weight: bold;`)
+      // console.table(`%cdefenders`, `font-weight: bold; color:red;`);
+      // console.table(this.defenders);
 
       this.updateDOMCharacters();
     } else {
       var characterName = $(event.currentTarget).data('name');
-      console.log(characterName);
+      // console.log(characterName);
       if(this.defenders[characterName]) {
         this.defender = this.defenders[characterName];
         this.defender.isDefender = false;
         this.defender.isOpponent = true;
 
         delete this.defenders[characterName];
+        this.startGame();
       }
 
       this.updateDOMCharacters();
-      this.startGame();
     }
   },
 
   victory: function() {
     // play victory music
     //hide attack button
-    $(attackButton).hide();
+    this.attackButton.hide();
     //remove opponent from defender array
     var i = this.defenders.indexOf(this.defender);
     console.log(i);
@@ -184,6 +185,31 @@ var game = {
     //   endGame()
     // }
   },
+
+  attack: function () {
+     // play character attack sound
+    console.log(game.defender);
+    game.loseHealth(true);
+
+    if(game.defender.healthPoints < 0) {
+      game.victory();
+    }
+
+    if(game.attacker.healthPoints < 0) {
+      game.endGame();
+    }
+    
+    game.attacker.attackPower = game.attacker.attackPower + game.attacker.attackPower;
+  },
+
+  loseHealth: function (counterStrike) {
+    game.defender.healthPoints = game.defender.healthPoints - game.attacker.attackPower;
+    // console.log(this.healthPoints);
+
+    if(counterStrike) {
+      game.loseHealth(false, this);
+    }
+  }
 }
 
 function Character(name, healthPoints, attackPower, counterAttackPower) {
@@ -199,33 +225,32 @@ function Character(name, healthPoints, attackPower, counterAttackPower) {
   // hit-sound: audio file,
   // attack-sound: audio file,
 
-  this.attack = function() {
-    console.log(this.defender);
-    // play character attack sound
-    if(this.isAttacker){
-      this.defender.loseHealth(true, this);
-    }
+  // this.attack = function() {
+  //   // console.log(game.defender);
+  //   // play character attack sound
+  //   game.defender.loseHealth(true, this);
 
-    if(this.defender.healthPoints < 0) {
-      victory();
-    }
+  //   console.log(game.defender);
+  //   if(game.defender.healthPoints < 0) {
+  //     victory();
+  //   }
 
-    if(this.attacker.healthPoints < 0) {
-      endGame();
-    }
+  //   if(game.attacker.healthPoints < 0) {
+  //     endGame();
+  //   }
     
-    this.attackPower = this.attackPower + this.attackPower;
-    console.log(this.attackPower);
-  },
+  //   game.attacker.attackPower = game.attacker.attackPower + game.attacker.attackPower;
+  //   console.log(game.attacker.attackPower);
+  // },
 
-  this.loseHealth = function(counterStrike, attacker) {
-    this.healthPoints = this.healthPoints - attacker.attackPower;
-    console.log(this.healthPoints);
+  // this.loseHealth = function(counterStrike, attacker) {
+  //   game.healthPoints = game.healthPoints - game.attacker.attackPower;
+  //   // console.log(this.healthPoints);
 
-    if(counterStrike) {
-      attacker.loseHealth(false, this);
-    }
-  },
+  //   if(counterStrike) {
+  //     game.attacker.loseHealth(false, this);
+  //   }
+  // },
 
   this.returnMarkup = function() {
     return `<figure class="character- character-image col-md-3 ${this.name}" data-name="${this.name}">
