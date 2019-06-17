@@ -1,22 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content=" width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <head>
+        <meta charset="UTF-8">
+        <meta content=" width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
-  <title>Star Wars RPG</title>
+        <title>Star Wars RPG</title>
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/styles.css"></head>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/styles.css" rel="stylesheet">
+    </head>
 
-  <body>
-    
+    <body class="bg-dark text-light container">
+        <section class="row">
+            <header class="col-md-12 text-center">
+                <h1>Star Wars RPG!</h1>
+                <h2 id="prompt">Select Your Hero to Start Battle…</h2>
+            </header>
+        </section>
+
+        <section class="row">
+            <div class="col-md-12" id="available-characters">
+                <header>
+                    <h4>Available Characters</h4>
+                </header>
+                <div class="character-grid row">
+                </div>
+            </div>
+        </section>
+        <section class="row">
+            <div class="col-md-12" id="defender-characters">
+                <header>
+                    <h4>Characters Available to Fight!</h4>
+                </header>
+                <div class="character-grid row"></div>
+            </div>
+        </section>
+        <section class="row" id="fight-area">
+            <header class="col-md-12">
+                <h3>Fight Area</h3>
+            </header>
+            <div class="col-md-4" id="attacker-character">
+                <header>
+                    <h4 class="character-name"></h4>
+                </header>
+                <div class="character-grid row">
+
+                </div>
+                <!-- this will be added when user selects player
+                  <figure class="character-image">
+                    <img>
+                    <figcaption class="character-stats health"></figcaption>
+                </figure> -->
+            </div>
+            <div class="col buttons">
+              <button type="button" id="attack-button" class="btn btn-lg">Attack!</button>
+              <button type="button" id="replay-button" class="btn btn-lg">Replay</button>
+            </div>
+            <div class="col-md-4" id="defender-character">
+                <header>
+                    <h4 class="character-name"></h4>
+                </header>
+                <div class="character-grid row">
+
+                </div>
+            </div>
+        </section>
 
 
+        <script crossorigin="anonymous" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="assets/js/main.js"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-
-  </body>
+    </body>
 </html>
