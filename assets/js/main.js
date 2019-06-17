@@ -12,9 +12,9 @@ var game = {
       luke: new Character('luke', 50, 20, 50),
       solo: new Character('solo', 500, 2000, 5000)
     };
-    this.attacker;
+    this.attacker = undefined;
     this.defenders = {};
-    this.defender;
+    this.defender = undefined;
     this.defeated = {};
     //this.playSound(titleMusic);
     this.availableCharactersArea = $('#available-characters .character-grid');
@@ -29,6 +29,7 @@ var game = {
     this.attackButton.hide();
     this.replayButton.hide();
     //load characters to DOM
+    this.updateDOM($('#prompt'), 'Select Your Hero to Start Battle!');
     this.updateDOMCharacters();
     $('.character-image').on('click', function() {
       game.choosePlayers();
@@ -73,7 +74,9 @@ var game = {
 
   promptReplay: function () {
     this.replayButton.show();
-    this.replayButton.click(this.init());
+    this.replayButton.click(function () {
+      game.init();
+    });
   },
 
   updateDOM: function(DOMElement, string) {
