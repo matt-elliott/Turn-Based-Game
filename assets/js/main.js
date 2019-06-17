@@ -50,7 +50,7 @@ var game = {
 
   endGame: function() {
     // this.playSound(titleMusic);
-    if(attacker.health-power > 5) {
+    if(this.attacker.healthPoints > 5) {
       this.victory();
     } else {
       this.lose();
