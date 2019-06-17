@@ -185,7 +185,7 @@ var game = {
   attack: function () {
      // play character attack sound
     console.log(game.defender);
-    game.loseHealth(true);
+    game.loseHealth(true, game.defender);
 
     if(game.defender.healthPoints < 0) {
       game.victory();
@@ -198,13 +198,14 @@ var game = {
     game.attacker.attackPower = game.attacker.attackPower + game.attacker.attackPower;
   },
 
-  loseHealth: function (counterStrike) {
-    game.defender.healthPoints = game.defender.healthPoints - game.attacker.attackPower;
-    // console.log(this.healthPoints);
+  loseHealth: function (counterStrike, character) {
+    character.healthPoints = character.healthPoints - game.attacker.attackPower;
 
-    if(counterStrike) {
-      game.loseHealth(false, this);
+    if (counterStrike) {
+      game.loseHealth(false, game.attacker);
     }
+
+    game.updateDOM($('.' + character.name + ' .health'), character.healthPoints);
   }
 }
 
