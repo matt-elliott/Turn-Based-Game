@@ -1,12 +1,16 @@
 var game = {
   init: function() {
-    // this.titleMusic = audiofile;
-    // this.gameMusic = audiofile;
-    // this.hitSound = audiofile;
-    // this.attackSound = audofile;
-    // this.victoryMusic = audofile;
-    // this.loseMusic = audoFile;
-    // this.wrongKeySound = audioFIle;
+    this.titleMusic = new Audio('assets/audio/title.mp3');
+    this.hitSound = new Audio('assets/audio/hit.mp3');
+    this.attackSound = new Audio('assets/audio/blaster-firing.mp3');
+    this.victoryMusic = new Audio('assets/audio/victory.mp3');
+    this.loseMusic = new Audio('assets/audio/lose.mp3');
+    this.wrongKeySound = new Audio('assets/audio/blaster-firing.mp3');
+    this.tauntSounds = [
+      new Audio('assets/audio/taunt1.mp3'),
+      new Audio('assets/audio/taunt2.mp3'),
+      new Audio('assets/audio/taunt3.mp3')
+    ],
     this.availableCharacters = {
       obiwan: new Character('obiwan',100, 5, 25),
       darth: new Character('darth', 200, 10, 25),
@@ -20,8 +24,8 @@ var game = {
     //this.playSound(titleMusic);
     this.availableCharactersArea = $('#available-characters .character-grid');
     this.defenderCharactersArea = $('#defender-characters .character-grid');
-    this.attackerCharacterArea = $('#fight-area #attacker-character .character-grid');
-    this.defenderCharacterArea = $('#fight-area #defender-character .character-grid');
+    this.attackerCharacterArea = $('#attacker-character .character-grid');
+    this.defenderCharacterArea = $('#defender-character .character-grid');
     this.attackButton = $('#attack-button');
     this.replayButton = $('#replay-button');
     console.log('here we go!');
@@ -36,10 +40,22 @@ var game = {
     $('.character-image').on('click', function() {
       game.choosePlayers();
     });
+
+    this.stopSounds();
+    //prompt user to click to start game and then play song
+    setTimeout(function() {
+      game.playSound(game.titleMusic);
+    }, 5000);
   },
 
   playSound: function(sound) {
-    //play audio file
+    sound.play();
+  },
+
+  stopSounds: function() {
+    this.titleMusic.pause();
+    this.loseMusic.pause();
+    this.victoryMusic.pause();
   },
 
   startGame: function() {
@@ -61,7 +77,7 @@ var game = {
   },
 
   endGame: function() {
-    // this.playSound(titleMusic);
+    this.playSound(this.titleMusic);
     if(this.attacker.healthPoints > 5) {
       this.victory();
     } else {
@@ -70,14 +86,17 @@ var game = {
   },
   
   lose: function () {
-    // this.playSound(this.loseMusic);
+    this.stopSounds();
+    this.playSound(this.loseMusic);
     this.attackButton.hide();
     this.updateDOM('header #prompt', `You Lose, ${game.attacker.name}!`);
     this.promptReplay();
   },
 
   victory: function () {
-    // this.playSound(this.loseMusic);
+    this.stopSounds();
+    this.victoryMusic.currentTime = 18.5;
+    this.playSound(this.victoryMusic);
     this.attackButton.hide();
     this.updateDOM('header #prompt', `You Win, ${game.attacker.name}!`);
     this.promptReplay();
@@ -86,6 +105,8 @@ var game = {
   promptReplay: function () {
     this.replayButton.show();
     this.replayButton.click(function () {
+      game.stopSounds();
+      game.playSound(game.tauntSounds[Math.floor(Math.random() * 4)]);
       game.init();
     });
   },
@@ -115,16 +136,13 @@ var game = {
         Object.keys(theObject).forEach(function(key) {
           var item = theObject[key];
           var html = item.returnMarkup();
-          // console.log(html);
           targetDiv.append(html);
         });
       }
     }
 
     function outputCharacterHTML(item, targetDiv) {
-      var html = item.returnMarkup();
-      // console.log(html);
-      targetDiv.append(html);
+      targetDiv.append(item.returnMarkup());
     }
 
     //put click back on
@@ -143,21 +161,16 @@ var game = {
   },
 
   choosePlayers: function() {
-    // console.log('click');
-    // console.assert(this.attacker, `No Attacker`);
     if(!this.attacker) {
       var characterName = $(event.currentTarget).data('name');
-      // console.error(`%cSetting Attacker`,`background: red; color: white; font-weight: bold;`);
-      // console.assert(this.availableCharacters[characterName], 'cant find attacker!');
+
       if(this.availableCharacters[characterName]) {
           this.attacker = this.availableCharacters[characterName];
           this.attacker.isAttacker = true;
           this.attacker.isDefender = false;
           this.attacker.isOpponent = false;
-          // console.table(this.attacker);
+
           delete this.availableCharacters[characterName];
-          //** TODO : remove click on already selected characters **/
-          // $('.available-characters').data(attackerName).off("click");
       }
 
       //move all characters from available-characters to defenders array
@@ -166,18 +179,10 @@ var game = {
         var name = characterToMove.name;
         characterToMove.isAttacker = false;
         characterToMove.isDefender = true;
-        // console.table(characterToMove);
 
         delete game.availableCharacters[character];
         game.defenders[characterToMove.name] = characterToMove;
       });
-
-      // console.log(`%cattackerName = ${characterName}`, `color: orange; font-weight: bold`);
-      // console.log(`%cavailable characters`, `color: lightblue; font-weight: bold;`)
-      // console.table(this.availableCharacters);
-      // console.log(`%cavailable defenders`, `color: lightblue; font-weight: bold;`)
-      // console.table(`%cdefenders`, `font-weight: bold; color:red;`);
-      // console.table(this.defenders);
 
       this.updateDOMCharacters();
     } else {
@@ -197,8 +202,7 @@ var game = {
   },
 
   attack: function () {
-     // play character attack sound
-    console.log(game.defender);
+    game.playSound(game.attackSound);
     game.loseHealth(true, game.defender);
 
     if(game.defender.healthPoints < 0) {
@@ -218,8 +222,10 @@ var game = {
     if (counterStrike) {
       game.loseHealth(false, game.attacker);
     }
-
-    game.updateDOM($('.' + character.name + ' .health'), character.healthPoints);
+    setTimeout( function() {
+      game.playSound(game.hitSound);
+      game.updateDOM($('.' + character.name + ' .health'), character.healthPoints);
+    }, 600);
   }
 }
 
@@ -235,33 +241,6 @@ function Character(name, healthPoints, attackPower, counterAttackPower) {
   this.imagePath = `http://place-hold.it/200/`,
   // hit-sound: audio file,
   // attack-sound: audio file,
-
-  // this.attack = function() {
-  //   // console.log(game.defender);
-  //   // play character attack sound
-  //   game.defender.loseHealth(true, this);
-
-  //   console.log(game.defender);
-  //   if(game.defender.healthPoints < 0) {
-  //     victory();
-  //   }
-
-  //   if(game.attacker.healthPoints < 0) {
-  //     endGame();
-  //   }
-    
-  //   game.attacker.attackPower = game.attacker.attackPower + game.attacker.attackPower;
-  //   console.log(game.attacker.attackPower);
-  // },
-
-  // this.loseHealth = function(counterStrike, attacker) {
-  //   game.healthPoints = game.healthPoints - game.attacker.attackPower;
-  //   // console.log(this.healthPoints);
-
-  //   if(counterStrike) {
-  //     game.attacker.loseHealth(false, this);
-  //   }
-  // },
 
   this.returnMarkup = function() {
     return `<figure class="character- character-image col-md-3 ${this.name}" data-name="${this.name}">
