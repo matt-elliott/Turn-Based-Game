@@ -11,11 +11,13 @@ var game = {
       new Audio('assets/audio/taunt2.mp3'),
       new Audio('assets/audio/taunt3.mp3')
     ],
+    //TODO make print name for character
+    //stormtrooper: new Character('stormtrooper', 'Stormtrooper',100, 5, 25),
     this.availableCharacters = {
-      obiwan: new Character('obiwan',100, 5, 25),
+      stormtrooper: new Character('stormtrooper' ,100, 5, 25),
       darth: new Character('darth', 200, 10, 25),
-      luke: new Character('luke', 50, 20, 50),
-      solo: new Character('solo', 500, 2000, 5000)
+      chirrut: new Character('chirrut', 50, 20, 50),
+      andor: new Character('andor', 500, 2000, 5000)
     };
     this.attacker = undefined;
     this.defenders = {};
@@ -48,8 +50,10 @@ var game = {
     }, 5000);
   },
 
-  playSound: function(sound) {
-    sound.play();
+  playSound: function (sound) {
+    if(sound != undefined) {
+      sound.play(); 
+    }
   },
 
   stopSounds: function() {
@@ -238,14 +242,13 @@ function Character(name, healthPoints, attackPower, counterAttackPower) {
   this.isDefender,
   this.isDefeated,
   this.isOpponent,
-  this.imagePath = `http://place-hold.it/200/`,
+  this.imagePath = `assets/images/characters-static.jpg`,
   // hit-sound: audio file,
   // attack-sound: audio file,
 
   this.returnMarkup = function() {
-    return `<figure class="character- character-image col-md-3 ${this.name}" data-name="${this.name}">
-    <figcaption class="character-stats"><span class="health">${this.healthPoints}</span><span class="name">${this.name}</span></figcaption>
-    <img src="${this.imagePath}"></figure>`;
+    return `<figure class="character character-image col-xs-6 col-sm-6 col-lg-3 ${this.name}" data-name="${this.name}">
+    <figcaption class="character-stats"><span class="health">${this.healthPoints}</span><span class="name">${this.name}</span></figcaption><div class="crop"><img src="${this.imagePath}"></div></figure>`;
   }
 }
 

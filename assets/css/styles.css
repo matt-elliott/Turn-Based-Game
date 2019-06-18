@@ -1,7 +1,55 @@
+body {
+  background-image: url('../images/background.gif');
+  background-repeat: repeat;
+}
+
 .btn {
   color: #fff;
   border: 2px solid red;
 }
 #prompt {
   text-transform: capitalize;
+}
+.character {
+  background-color: rgb(71, 82, 91);
+  border: 4px #efefef groove;
+}
+.character .crop {
+  position: relative;
+  display: block;
+  min-height: 380px;
+  max-width: 80%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.character img {
+  position: absolute;
+  top: 0;
+  min-height: 100%;
+  max-width: 500%;
+}
+.character.darth img {
+  left: -173%;
+}
+.character.stormtrooper img {
+  left: -13%;
+}
+.character.chirrut img {
+  left: -95%;
+  top: -78%;
+}
+.character.andor img {
+  left: -255%;
+  top: -79%;
+}
+
+.character figcaption {
+  background-color: #5E5E5E;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  z-index: 2;
 }
