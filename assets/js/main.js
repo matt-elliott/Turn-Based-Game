@@ -39,15 +39,13 @@ var game = {
     this.updateDOM($('#prompt'), 'Select Your Hero to Start Battle!');
     this.updateDOMCharacters();
 
+    this.stopSounds();
+    game.playSound(game.titleMusic);
+    $('#prompt-box').fadeOut('slow');
+
     $('.character-image').on('click', function() {
       game.choosePlayers();
     });
-
-    this.stopSounds();
-    //prompt user to click to start game and then play song
-    setTimeout(function() {
-      game.playSound(game.titleMusic);
-    }, 5000);
   },
 
   playSound: function (sound) {
@@ -65,7 +63,7 @@ var game = {
   startGame: function() {
     console.log('game started');
     // this.play(this.gameMusic);
-    this.attackButton.click(this.attack);
+    this.attackButton.on('click', this.attack);
 
     $('body').on('keyup', function () {
       if (event.key === ' ') {
@@ -90,6 +88,8 @@ var game = {
   },
   
   lose: function () {
+    this.attackButton.off('click');
+    $('body').off('keyup');
     this.stopSounds();
     this.playSound(this.loseMusic);
     this.attackButton.hide();
@@ -101,6 +101,8 @@ var game = {
   },
 
   victory: function () {
+    this.attackButton.off('click');
+    $('body').off('keyup');
     this.stopSounds();
     this.victoryMusic.currentTime = 18.5;
     this.playSound(this.victoryMusic);
@@ -250,11 +252,14 @@ function Character(name, healthPoints, attackPower, counterAttackPower) {
   // attack-sound: audio file,
 
   this.returnMarkup = function() {
-    return `<figure class="character character-image col-xs-3 col-sm-6 col-lg-3 ${this.name}" data-name="${this.name}">
+    return `<figure class="character character-image col-md-3 ${this.name}" data-name="${this.name}">
     <figcaption class="character-stats"><span class="health">${this.healthPoints}</span><span class="name">${this.name}</span></figcaption><div class="crop"><img src="${this.imagePath}"></div></figure>`;
   }
 }
 
 $(document).ready(function() {
-  game.init();
+  $('body').on('keyup', function() {
+    $('body').off('keyup');
+    game.init();
+  });
 });

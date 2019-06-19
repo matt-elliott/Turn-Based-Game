@@ -2,12 +2,35 @@ body {
   background-image: url('../images/background.gif');
   background-repeat: repeat;
 }
-
+#prompt-box {
+  position: absolute;
+  top: 108px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url('../images/background.gif');
+  background-repeat: repeat;
+  z-index: 3;
+  text-align: center;
+  padding: 20% 25% 25%;
+  font-family: 'starwars';
+}
+#prompt-box h2 {
+  font-size: 60px;
+}
 .btn {
+  background-color: red;
   color: #fff;
-  border: 2px solid red;
+  border: 2px solid darkred;
+  width: 100%;
+  text-align: center;
+}
+header h1 {
+  font-family: 'starwars-title';
+  font-size: 5rem;
 }
 #prompt {
+  font-family: "starwars";
   text-transform: capitalize;
 }
 .character {
@@ -37,3 +60,56 @@ body {
   text-align: center;
   z-index: 2;
 }
+#fight-area .character {
+  max-width: 100%;
+}
+@font-face{
+  font-family: "starwars-title";
+  src: url('../fonts/starjout/Starjout.ttf')
+}
+@font-face{
+  font-family: "starwars";
+  src: url('../fonts/starjedi/Starjedi.ttf');
+}
+/** TODO FIX MOBILE SIZES **/
+/* @media screen and (max-width: 575px) {
+  .character .crop {
+    top: 0;
+    min-width: 100%;
+    min-height: 100px;
+  }
+  .character img {
+    top: 0;
+    left: -146%;
+    max-width: 400%;
+  }
+  .character.andor img {
+    top: -12px;
+  }
+  .character.chirrut img {
+    top: -21px;
+  }
+  .character.darth img {
+    top: -3px;
+  }
+  .character.stormtrooper img {
+    top: -27px;
+  }
+  .character .name {
+    display: none;
+  }
+  #fight-area .character {
+    max-width: 100%;
+  }
+  #fight-area .character img {
+    top: -35px;
+    left: -50%;
+    max-width: 200%;
+  }
+  #fight-area .character.darth img {
+    top: -13px;
+  }
+  .btn {
+    width: 100%;
+  }
+} */
