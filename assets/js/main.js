@@ -62,12 +62,11 @@ var game = {
 
   startGame: function() {
     console.log('game started');
-    // this.play(this.gameMusic);
-    this.attackButton.on('click', this.attack);
+    this.attackButton.on('click', game.attacker.attack);
 
     $('body').on('keyup', function () {
       if (event.key === ' ') {
-        game.attack();
+        game.attacker.attack;
       } else {
         game.playSound(game.wrongKeySound);
       }
@@ -209,33 +208,6 @@ var game = {
       this.updateDOMCharacters();
     }
   },
-
-  attack: function () {
-    game.playSound(game.attackSound);
-    game.loseHealth(true, game.defender);
-
-    if(game.defender.healthPoints < 0) {
-      game.victory();
-    }
-
-    if(game.attacker.healthPoints < 0) {
-      game.endGame();
-    }
-    
-    game.attacker.attackPower = game.attacker.attackPower + game.attacker.attackPower;
-  },
-
-  loseHealth: function (counterStrike, character) {
-    character.healthPoints = character.healthPoints - game.attacker.attackPower;
-
-    if (counterStrike) {
-      game.loseHealth(false, game.attacker);
-    }
-    setTimeout( function() {
-      game.playSound(game.hitSound);
-      game.updateDOM($('.' + character.name + ' .health'), character.healthPoints);
-    }, 600);
-  }
 }
 
 function Character(name, healthPoints, attackPower, counterAttackPower) {
@@ -250,7 +222,32 @@ function Character(name, healthPoints, attackPower, counterAttackPower) {
   this.imagePath = `assets/images/characters/${this.name}.png`,
   // hit-sound: audio file,
   // attack-sound: audio file,
+  this.attack = function () {
+    game.playSound(game.attackSound);
+    game.defender.loseHealth(true, game.defender);
 
+    if(game.defender.healthPoints < 0) {
+      game.victory();
+    }
+
+    if(game.attacker.healthPoints < 0) {
+      game.endGame();
+    }
+    
+    this.attackPower = this.attackPower + game.attacker.attackPower;
+  },
+
+  this.loseHealth = function (counterStrike, character) {
+    character.healthPoints = character.healthPoints - game.attacker.attackPower;
+
+    if (counterStrike) {
+      character.loseHealth(false, game.attacker);
+    }
+    setTimeout( function() {
+      game.playSound(game.hitSound);
+      game.updateDOM($('.' + character.name + ' .health'), character.healthPoints);
+    }, 600);
+  },
   this.returnMarkup = function() {
     return `<figure class="character character-image col-md-3 ${this.name}" data-name="${this.name}">
     <figcaption class="character-stats"><span class="health">${this.healthPoints}</span><span class="name">${this.name}</span></figcaption><div class="crop"><img src="${this.imagePath}"></div></figure>`;
