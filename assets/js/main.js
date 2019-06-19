@@ -93,7 +93,10 @@ var game = {
     this.stopSounds();
     this.playSound(this.loseMusic);
     this.attackButton.hide();
-    this.updateDOM('header #prompt', `You Lose, ${game.attacker.name}!`);
+    this.updateDOM(
+      'header #prompt',
+      `You Lose, ${game.attacker.name}!`
+    );
     this.promptReplay();
   },
 
@@ -242,12 +245,12 @@ function Character(name, healthPoints, attackPower, counterAttackPower) {
   this.isDefender,
   this.isDefeated,
   this.isOpponent,
-  this.imagePath = `assets/images/characters-static.jpg`,
+  this.imagePath = `assets/images/characters/${this.name}.png`,
   // hit-sound: audio file,
   // attack-sound: audio file,
 
   this.returnMarkup = function() {
-    return `<figure class="character character-image col-xs-6 col-sm-6 col-lg-3 ${this.name}" data-name="${this.name}">
+    return `<figure class="character character-image col-xs-3 col-sm-6 col-lg-3 ${this.name}" data-name="${this.name}">
     <figcaption class="character-stats"><span class="health">${this.healthPoints}</span><span class="name">${this.name}</span></figcaption><div class="crop"><img src="${this.imagePath}"></div></figure>`;
   }
 }

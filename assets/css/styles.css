@@ -18,31 +18,15 @@ body {
   position: relative;
   display: block;
   min-height: 380px;
-  max-width: 80%;
   overflow: hidden;
   margin: 0 auto;
 }
 .character img {
   position: absolute;
-  top: 0;
-  min-height: 100%;
-  max-width: 500%;
+  bottom: 40px;
+  max-width: 100%;
+  height: auto;
 }
-.character.darth img {
-  left: -173%;
-}
-.character.stormtrooper img {
-  left: -13%;
-}
-.character.chirrut img {
-  left: -95%;
-  top: -78%;
-}
-.character.andor img {
-  left: -255%;
-  top: -79%;
-}
-
 .character figcaption {
   background-color: #5E5E5E;
   position: absolute;
