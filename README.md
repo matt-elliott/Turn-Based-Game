@@ -1,4 +1,4 @@
-# Star Wars Roleplaying Game
+# Star Wars Turn Based Game
 http://matt-elliott.github.io/unit-4-game/
 
 ## USAGE
